@@ -1,0 +1,47 @@
+application: perf-hier
+version: 1
+runtime: python
+api_version: 1
+
+builtins:
+- datastore_admin: on
+
+derived_file_type:
+- python_precompiled
+
+handlers:
+- url: /favicon.ico
+  static_files: images/favicon.ico
+  upload: images/favicon.ico
+
+
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+
+- url: /stats.*
+  script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
+
+
+
+- url: /stylesheets
+  static_dir: stylesheets
+
+- url: /js
+  static_dir: js
+
+- url: /build/(.*\.js)
+  static_files: build/\1
+  upload: build/(.*\.js)
+
+
+# - url: /api/register_perf*
+#   script: register_perf.py
+
+- url: /task/aggregate_hourly_stats
+  script: perf_hier.py
+  login: admin
+
+- url: /.*
+  script: perf_hier.py
+

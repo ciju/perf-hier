@@ -1,0 +1,6 @@
+queue:
+- name: fjqueue
+  rate: 5/s
+
+- name: default
+  rate: 0/s  

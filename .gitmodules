@@ -1,0 +1,15 @@
+[submodule "js/lib/jquery.hotkeys"]
+	path = js/lib/jquery.hotkeys
+	url = http://github.com/jeresig/jquery.hotkeys.git
+[submodule "js/lib/jquery.tmpl"]
+	path = js/lib/jquery.tmpl
+	url = http://github.com/jquery/jquery-tmpl.git
+[submodule "js/lib/javascript-debug"]
+	path = js/lib/javascript-debug
+	url = http://github.com/cowboy/javascript-debug.git
+[submodule "js/lib/javascript-stacktrace"]
+	path = js/lib/javascript-stacktrace
+	url = http://github.com/emwendelin/javascript-stacktrace.git
+[submodule "js/lib/dygraphs"]
+	path = js/lib/dygraphs
+	url = http://github.com/danvk/dygraphs.git

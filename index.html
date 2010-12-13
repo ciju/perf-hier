@@ -1,0 +1,377 @@
+<html>
+  <head>
+    <script>
+    // perf-hier custom code helper
+    (function (app) {
+    window._phc = {};
+    var app = _phc;
+        var cmds = ["start", "end"], cmd, i, len;
+        app.raw_tags = app.raw_tags || []; app.auto_tags = false;
+        for (i=0, len=cmds.length; i<len; i++) {
+            cmd = cmds[i];
+            app[cmd] = (function (cmd) {
+                return (function (str, time) {
+                    time = time || +new Date;
+                    app.raw_tags.push([cmd, str, time]);
+                });
+            }(cmd));
+        }
+        app.start("page");
+    })(window._phc = {});
+
+    _phc.start("head");
+    _phc.start("css");
+    </script>
+
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    <script>_phc.end();_phc.end();</script>
+
+    <script>
+      app_state = REPLACE_WITH_APP_STATE;
+    </script>
+
+    <title>Performance Hierarchy</title>
+  </head>
+  <body>
+    <noscript>
+      For full functionality of this site it is necessary to enable JavaScript.
+      Here are the <a href="http://www.enable-javascript.com/" target="_blank">
+      instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+
+    <script>_phc.start("body");_phc.start("html");</script>
+
+    <!-- actual markup for the site -->
+    <div id="types-page">
+      <div id="header">
+        <div id="userbox" class="userbox">&nbsp;</div>
+        <h1>Performance Hierarchy: </h1>
+      </div>
+      <div id="main">
+        <ul  id="navigation" class="tabs"></ul>
+        <div id="page">
+          <div id="notice"></div>
+          <div id="content"> </div>
+        </div>
+      </div> <!-- /main -->
+    </div> <!-- /types-page -->
+
+    <script>_phc.end();_phc.start("scripts");_phc.start("jq")</script>
+    <!-- @combine_and_build combined -->
+    <script src="/js/vendor/jquery.min.js"></script>
+
+    <script src="/js/lib/jquery.tmpl/jquery.tmpl.js"></script>
+    <script src="/js/lib/jquery.ba-bbq.min.js"></script>
+    <script src="/js/lib/javascript-stacktrace/stacktrace.js"></script>
+    <script src="/js/lib/javascript-debug/ba-debug.js"></script>
+    <script src="/js/lib/dygraph-combined.js"></script>
+    <script src="/js/lib/json2.js"></script>
+
+    <script src="/js/debug.js"></script>
+    <script src="/js/config.js"></script>
+
+    <script src="/js/jquery.common.js"></script>
+    <script src="/js/vendor/pubsub.js"></script>
+    <script src="/js/userbox.js"></script>
+    <script src="/js/perf.hier.js"></script>
+
+    <script src="/js/lib/raphael-min.js"></script>
+    <script src="/js/lib/plot.js"></script>
+    <!-- @end -->
+    <script>_phc.end();</script>
+
+    <script>_phc.start("client")</script>
+
+    <!-- These are for third party client. -->
+    <!-- @combine_and_build client -->
+    <script src="/js/lib/browser-detect.js"></script>
+    <script src="/js/lib/json2.js"></script>
+    <!-- <script src="/js/client/log.js"></script> -->
+    <!-- @end -->
+    <!-- Fin. Third party client. -->
+    <script>_phc.end(); _phc.end(); // client, scripts</script>
+
+
+    <!-- page templates -->
+    <script id="page_show_script" type="text/x-jquery-tmpl">
+      <div>
+        <p>The code shown on this page will help us collect data for project<b>
+          ${project.name}</b> from your clients to our server. Code in this page
+          will help you with sending data for logging at ${site}. This code
+          would be put in the html source code of page thats to be measured.</p>
+
+        <div id="top_code">
+          <div><a href="javascript:;">use custom code</a></div>
+          <p>Put this code at the top of the page. This is to allow the logging to
+            happen, even before the concerned files are loaded from ${site}.</p>
+          <div class="code" id="top_code.js"></div>
+        </div>
+
+        <div id="custom_code_helper" style="display:none">
+          <div><a href="javascript:;">use default logging</a></div>
+          <p>Another option is to send custom performance stats. To help with
+            that, include the code below at the top of the page, instead
+            of the earlier one. </p>
+          <div class="code" id="custom_code_helper.js"></div>
+        </div>
+
+        <div id="bottom_code">
+          <p>The code listed below, could be included at the bottom of the page,
+            before body tag.</p>
+          <div class="code" id="bottom_code.js"></div>
+        </div>
+
+      </div>
+    </script>
+
+    <script id="page_select" type="text/x-jquery-tmpl">
+      <div>
+        <label for="project_selection">Select a Project</label>
+        <select name="project_selection">
+          {{each(i, proj) projects}}
+          <option ${proj.selected} value=${proj.ph_id}>
+            ${proj.name}
+          </option>
+          {{/each}}
+        </select>
+      </div>
+    </script>
+
+
+    <script>_phc.start("pages");</script>
+
+    <script id="about_site" type="text/x-jquery-tmpl">
+      <div>
+        <h2>About Perf-hier (Performane Hierarchy).</h2>
+        <p>
+          Consider recording page load times (the onload event) for all your
+          users and tracking it across time. Gathering aggregate stats. Breaking
+          the stats based on browser etc. This app (perf-hier) helps you do that without
+          setting up your own back-end servers.
+        </p>
+
+        <p>
+          Comparison with related solution might make the offering more
+          clear. <a href="http://code.google.com/speed/page-speed/docs/overview.html">Google
+          Page Speed</a>, <a href="http://developer.yahoo.com/yslow/">YSlow</a>
+          analyzes page performance characteristics and reports
+          improvements. This site is about the measurement and tracking of page
+          performance. <a href="http://code.google.com/p/jiffy-web/">Jiffy-web</a>
+          provides tools to setup measurement at front-end, record the logs and
+          analyze the logs. But the servers have to be setup, the database
+          configured
+          etc. <a href="http://developer.yahoo.com/blogs/ydn/posts/2010/06/performance_testing_with_boomerang/">Boomerang</a>
+          also provides a front-end tool to register various events, and send a
+          beacon to back-end and is in some ways better than Jiffy. But again,
+          the back-end has to be brought up and maintained. Much like the
+          approach taken by Google Analytics, Perf-hier provides a solution
+          where the developer would include small javascript in the page, and
+          rest all is taken care of, by the app.
+        </p>
+
+        <p> In few words, the app provides <b>page speed analytics</b>. </p>
+
+        <p> By the way, this is not the complete truth. For more information try
+          the <a href="/#url=/about/details">details</a> page.
+        </p>
+
+        <p>
+          tl;dr:
+          <a id="demolink" class="button" href="javascript:;">Try the demo</a>
+          On clicking you should see 'stats for testproj' on the left side
+          navigation. Explore it to know the kind of stats available. Its the
+           performance stats for this site.
+        </p>
+
+        <p>
+          <a href="/login">Login</a> using your Gmail account. Create a <a href="/#url=/proj/new">new
+          project</a>. And include the javascript provided, in your
+          website. Later, u can see the stats
+          by <a href="/#url=/proj/select">selecting</a> the project.
+        </p>
+
+        <p>If your site has more than 1 req/sec, <a href="#url=/about/details">contact me</a> and I will setup a
+        separate server for your site. I cant go beyond free quota of Google
+        App Engine. </p>
+      </div>
+    </script>
+
+    <script id="about_stats" type="text/x-jquery-tmpl">
+      <h2>Stats and presentation</h2>
+      <h3>Whats logged ? </h3>
+      <p>
+        If default script snippets is used, it logs 3-4 events. First, when the
+        javascript snippet, to be included at the top of file, is
+        executed. Second, when the bottom snippet is executed. Third, when the dom
+        load event happens. And fourth, if a cookie was saved when last page
+        unload happened. The hierarchy measurements are defined as follows.
+      </p>
+      <ol class="pure-list">
+        <li>whole: The whole request. if unload event was logged, it also is
+        included in the measure.</li>
+        <li>whole/req: Time between the last unload and current page start.</li>
+        <li>whole/page: From page start to page load.</li>
+        <li>whole/page/body: From page start to page end.</li>
+      </ol>
+      </br>
+      <p>
+        You could have custom hierarchies. The beacon sent to server is quite
+        simple. So you could write your own javascript to send beacons to
+        perf-hier server. For convenience, a script is also provided (proj/src
+        in the nav). It helps log the data in hierarchical way.
+      </p>
+
+      <h3>How are the stats presented ?</h3>
+      <p>
+        The aggregate of the measured hierarchy is presented in a hierarchical
+        ring form. Its inspired by the GNU Linux tool
+        called <a href="http://www.marzocca.net/linux/baobab/">Disk Usage
+        Analyzer</a>. Its made with <a href="http://raphaeljs.com/">Raphaël Javascript
+        Library</a>. Clicking on any ring, brings the respective ring in center
+        and only shows its hierarchy. Clicking at the center bring the structure
+        to its original configuration.
+      </p>
+      <p>
+        Also a graph shows the timeline for all the tags. Graph is created with
+        <a href="http://danvk.org/dygraphs/">Dygraphs</a>. It allows zooming
+        into time range.
+      </p>
+
+
+    </script>
+
+    <script id="about_details" type="text/x-jquery-tmpl">
+      <div>
+        <!-- as my Kylie would say (
+        http://en.wikiquote.org/wiki/Fantastic_Mr._Fox_%28film%29 ) -->
+        <h2>Who How? what now?</h2>
+
+        <h3>who</h3>
+        <p>The author is named ciju. He can be found
+        at: <a href="http://ciju.wordpress.com">wordpress</a>, <a href="http://www.facebook.com/ciju.cherian">facebook</a>
+        and <a href="http://github.com/ciju">github</a>.
+        </br>
+        He can be mailed at: mail.ciju.cherian{at}gmail
+        </p>
+
+        <h3>how</h3>
+        <p>The app allows gathering statistics for any hierarchical data. It
+        keeps track of aggregate and timeline of the stats. One could find
+        various use for it, apart from page performance analytics.</p>
+        <p> This app is implemented
+          on <a href="http://code.google.com/appengine/">Google App
+          Engine</a>. Google App Engine provides unique opportunity. It allows
+          reasonable free usage. Its designed with scalability in mind. But it
+          puts limits on various operations. This app is built across those
+          limits. It tries to use the free quota efficiently. It records the
+          beacons sent from client side, without much processing. In about a
+          second, it gather the received requests. And updates a common
+          datastructure (to overcome the 1 write per sec(approx) limit). These
+          are maintained on hourly basis. A cron job further updates the main
+          datastructure with these updates on hourly basis. The result is
+          available/accessible via APIs. Haven't implemented authentication for
+          the API, so currently only the in-page javascript, based on the login
+          cookie, is allowed to access the API. Well, if you r interested, let
+          me know. I will provide you with more details.
+          </br>
+          By the way, did you notice, the site has no images. Except the fevicon.
+        </p>
+
+
+        <h3>what now?</h3>
+        <p>This project is in beta (may be even alpha)
+          stage. Catch the bugs and let me know.
+          <!-- i shall try to squash them. --> There are many possibilities for
+          the app. I will try to implement then one by one.
+
+          Some examples:
+          <ul class="pure-list">
+            <li><b>Live update of graphs:</b> Graphs show the data, about an hour
+            late. That too with manual refresh. Some time, i will get to
+            implementing live auto updates of graphs. </li>
+            <li><b>Dimensions:</b> At the moment only browser dimension is
+            supported. There is scope for adding dimension like user geolocation
+            (IP or browser provided). May be even user net connection bandwidth
+            and latency, ex: as provided
+            by <a href="https://github.com/yahoo/boomerang">Boomerang</a> </li>
+            <li><b>Better stats:</b> The outliers might effect the average
+            count. The characteristics for cached site might be different than
+            uncached once. Similarly there are many improvements that could be
+            added to the stats. </li>
+            <li><b>Front-end:</b> The front-end is basically written in
+            javascript. It uses API to interact/get data from back-end. I have
+            skipped the caching altogether, in this version of app. Also, the
+            front-end is not quite stable yet. Again lots to do.</li>
+            <li><b>WebTiming API:</b> could
+            use <a href="http://dev.w3.org/2006/webapi/WebTiming/">WebTiming
+            API</a> to gather stats (atleast for the browsers which have
+            implemented it.</li>
+          </ul>
+        </p>
+
+        <!-- <p>also talk about the presentation. explain the hierarchical ring -->
+        <!-- graph. also the timelines. and that u should not change tags, as they -->
+        <!-- will screw the aggregate. probably just delete the old one. or may be -->
+        <!-- in future, have a new reference point for calculating the aggregate for -->
+        <!-- hierarchical ring.</p> -->
+
+      </div>
+    </script>
+
+    <!-- @combine_and_build app -->
+    <script src="/js/util.url.js"></script>
+    <script src="/js/pages.js"></script>
+    <script src="/js/page.about.site.js"></script>
+    <script src="/js/page.project.new.js"></script>
+    <script src="/js/page.project.show-script.js"></script>
+    <script src="/js/page.project.select.js"></script>
+    <script src="/js/page.stats.js"></script>
+    <!-- @end -->
+
+    <script>_phc.end();</script>
+
+    <!-- <script src="/js/page.init.js"></script> -->
+
+    <script type="text/javascript">
+    // perf-hier bottom code
+    (function(app) { try {
+        if (!app.auto_tags) { app.end(); } else { app.ts.body_end = +new Date; }
+
+        var ph = document.createElement('script'); ph.type = 'text/javascript'; ph.async = true;
+        var server = (app_state == "dev") ? "localhost:8080" : "perf-hier.appspot.com";
+        app.ph_id = (app_state == "dev") ? 1 : 61007;
+        ph.src = "//"+server+"/js/client/log.js";
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ph, s);
+    } catch (x) {} })(_phc);
+    </script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-19579319-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+
+    <!-- Start of Woopra Code -->
+    <script type="text/javascript">
+      var woo_settings = {idle_timeout:'300000', domain:'perf-hier.appspot.com'};
+      (function(){
+      var wsc = document.createElement('script');
+      wsc.src = document.location.protocol+'//static.woopra.com/js/woopra.js';
+      wsc.type = 'text/javascript';
+      wsc.async = true;
+      var ssc = document.getElementsByTagName('script')[0];
+      ssc.parentNode.insertBefore(wsc, ssc);
+      })();
+    </script>
+    <!-- End of Woopra Code -->
+
+    <script>_phc.end();_phc.event("bodyend");</script>
+  </body>
+</html>
+

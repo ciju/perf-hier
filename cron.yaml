@@ -1,0 +1,4 @@
+cron:
+  - description: hourly aggragation of stats
+    url: /task/aggregate_hourly_stats
+    schedule: every 35 minutes
